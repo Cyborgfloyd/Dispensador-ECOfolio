@@ -14,15 +14,17 @@ Adafruit_SSD1306 pantalla(ANCHOPANTALLA, ALTOPANTALLA, &Wire, RESETOLED);
 MFRC522 lectorRFID(PINSS, PINRST);
 
 #define PINLED 2
-#define TIEMPOLEDENCENDIDO 3000 // Tiempo en milisegundos (5 segundos)
+#define TIEMPOLEDENCENDIDO 3000 
+// Tiempo en espera (5 segundos)
 
-#define MAXINTENTOSESCANEO 3 // Máximo número de intentos de escaneo por día
+#define MAXINTENTOSESCANEO 3 
+// Maximo número de intentos de escaneo por día
 
 unsigned long ultimoMillisEscanear = 0;
 bool estadoLED = false;
 int intentosEscanearHoy = MAXINTENTOSESCANEO;
 
-// '580b57fcd9996e24bc43c39c (1)', 67x64px
+// imagen 
 const unsigned char epd_bitmap_580b57fcd9996e24bc43c39c__1_ [] PROGMEM = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
   0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x80, 
@@ -62,7 +64,7 @@ const unsigned char epd_bitmap_580b57fcd9996e24bc43c39c__1_ [] PROGMEM = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-// Array of all bitmaps for convenience. (Total bytes used to store images in PROGMEM = 592)
+
 const int epd_bitmap_allArray_LEN = 1;
 const unsigned char* epd_bitmap_allArray[1] = {
   epd_bitmap_580b57fcd9996e24bc43c39c__1_
@@ -87,7 +89,8 @@ void setup() {
 
 void loop() {
   if (millis() - ultimoMillisEscanear > TIEMPOLEDENCENDIDO) {
-    digitalWrite(PINLED, LOW); // Apagar LED después de TIEMPOLEDENCENDIDO
+    digitalWrite(PINLED, LOW); 
+    // Apagar LED después de 5 seg
     estadoLED = false;
     pantalla.clearDisplay();
     pantalla.drawBitmap(0, 0, epd_bitmap_580b57fcd9996e24bc43c39c__1_, 67, 64, 1);
@@ -107,7 +110,8 @@ void loop() {
       pantalla.setTextColor(SSD1306_WHITE);
       pantalla.setCursor(0,0);
       pantalla.println("ID de Tarjeta:");
-      pantalla.println(obtenerIdTarjeta()); // Obtener y mostrar ID de la tarjeta
+      pantalla.println(obtenerIdTarjeta()); 
+      // Obtener y mostrar ID de la tarjeta
       pantalla.println("Intentos restantes: " + String(intentosEscanearHoy));
       pantalla.display();
 
@@ -116,7 +120,7 @@ void loop() {
       estadoLED = true;
       ultimoMillisEscanear = millis();
     } else {
-      // No hay más intentos disponibles, mostrar mensaje en la pantalla OLED
+      // mostrar mensaje en la pantalla OLED
       pantalla.clearDisplay();
       pantalla.setTextSize(1);
       pantalla.setTextColor(SSD1306_WHITE);
@@ -128,7 +132,8 @@ void loop() {
       delay(3000);
     }
 
-    lectorRFID.PICC_HaltA(); // Detener la tarjeta actual
+    lectorRFID.PICC_HaltA(); 
+    // Detener la tarjeta actual
   }
 }
 
